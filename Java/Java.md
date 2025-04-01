@@ -536,6 +536,10 @@ enum Season {
 
 ### 注解
 - 注解是Java5.0引入的新特性，可以用来修饰代码和限制代码，但不会影响代码的运行。
+- `isAnnotationPresent(Class<? extends Annotation> annotationClass)`：判断是否存在某个注解。
+- `getAnnotation(Class<? extends Annotation> annotationClass)`：获取某个注解。
+- `getDeclaredAnnotations()`：获取所有注解。
+- 注解的属性：注解可以有属性。
 - `@Override`：用来修饰方法，表示该方法覆盖了父类的方法。
 - `@Deprecated`：用来标记过时的方法或类。
 - `@SuppressWarnings(value = "")`：用来抑制警告信息。
@@ -1891,6 +1895,11 @@ $$
 - `newInstance(Object... args)`：**调用构造函数，传入参数，返回构造的对象。**
 - `setAccissible(boolean flag)`：==设置构造函数的访问权限。==
   - 设置为`true`时，使程序不检查安全性，即允许调用私有构造函数。
+
+
+### Proxy 代理
+![alt text](image-5.png)
+![alt text](image-6.png)
 
 ## JDK8及JDK8之后的新特性
 ### Lambda表达式
