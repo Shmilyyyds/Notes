@@ -55,6 +55,10 @@
 >   - 手动关闭容器：`ConfigurableApplicationContext.close()`
 >   - 注册关闭钩子，在虚拟机退出前先关闭容器：`ConfigurableApplicationContext.registerShutdownHook()`
 
+> 扩展：十步生命周期：
+> ![alt text](image-19.png)
+
+
 
 
 ### 注入
@@ -82,6 +86,11 @@
 ![alt text](image-8.png)
 
 
+#### 循环依赖
+![alt text](image-20.png)
+> 三级缓存：
+> ![alt text](image-21.png)
+
 ## 注解配置
 ### 注入
 - 配置文件转化为类
@@ -99,7 +108,7 @@
 
 - 依赖注入注解
 ![alt text](image-10.png)
-> 默认@Autowired注解，是根据==类型==注入。
+> 默认@Autowired注解，是根据==类型==注入（**@Resource**注解也可以，推荐，它是根据ID注入的）。
 > 试用@Qualifier("bookDao")注解，可以指定对应Bean。
 >
 > **使用@Value注解，可以直接注入基本类型和String。**
@@ -180,7 +189,7 @@ public class AppConfig {
   ```java
   @Configuration
   @ComponentScan("com.example")
-  @EnableAspectJAutoProxy
+  @EnableAspectJAutoProxy(proxyTargetClass=true) // 开启AOP注解驱动支持
   public class AppConfig {}
   ```
 
@@ -188,4 +197,48 @@ public class AppConfig {
 ![alt text](image-16.png)
 > Spring AOP的本质是代理模式。
 
+
+### AOP切入点表达式
+![alt text](image-17.png)
+**==切入点通常描述到接口，可以降低耦合。==**
+> 通配符
+> ![alt text](image-18.png)
+
+
+### 通知类型
+- @Before：在目标方法执行前执行
+- @After：在目标方法执行后执行
+- @AfterReturning：在目标方法正常返回后执行
+- @AfterThrowing：在目标方法抛出异常后执行
+- @Around：在目标方法执行前后执行
+
+```java
+@Component
+@Aspect
+@Order(1) // 定义有多个切面时执行顺序，数字越小优先级越高
+public class MyAdvice {
+    @Pointcut("execution(void com.example.BookService.*(..)")
+    private void pointcut() {}
+
+    @Around("pointcut()")
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+      System.out.println("before");
+      Object result = joinPoint.proceed();
+      System.out.println("after");
+      return result;
+    }
+}
+```
+
+> `JoinPoint`->`ProceedingJoinPoint`方法
+> - ==如果有JoinPoint参数，必须是第一个参数。==
+> - 包含目标方法的所有信息，可以获取方法参数和返回值。  
+>   - `joinPoint.getArgs()`：获取方法参数  
+>   - `joinPoint.proceed()`：执行目标方法  
+>   - `joinPoint.getSignature()`：返回`Signature`类，获取方法签名  
+>     - `joinPoint.getSignature().getName()`：获取方法名  
+>     - `joinPoint.getSignature().getDeclaringTypeName()`：获取类名  
+> - 可以调用`joinPoint.proceed()`方法，执行目标方法。
+
+## Spring对事务的处理
 
