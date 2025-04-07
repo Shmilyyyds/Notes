@@ -347,6 +347,8 @@ from -> where -> group by -> having -> select -> order by -> limit
 
 ## 函数
 ### 字符串函数
+- `left`/`right`：从字符串左边/右边截取指定长度的字符
+- `length`：返回字符串长度
 ![alt text](image-1.png)
 
 
@@ -368,6 +370,13 @@ select date_sub(now(), INTERVAL 70 DAY);
 select datediff('2021-01-01', '2021-01-02');
 ```
 
+### 窗口函数
+- `rank()/dense_rank()`：返回当前行的排名（`dense_rank()`相同值相同排名）
+```sql
+# 窗口函数
+# 计算每个部门的平均薪水
+select dept_id, avg(salary) over(partition by dept_id) as avg_salary from employees;
+```
 
 ### 流程控制函数
 ![alt text](image-4.png)

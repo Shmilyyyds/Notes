@@ -55,7 +55,7 @@
 >   - 手动关闭容器：`ConfigurableApplicationContext.close()`
 >   - 注册关闭钩子，在虚拟机退出前先关闭容器：`ConfigurableApplicationContext.registerShutdownHook()`
 
-> 扩展：十步生命周期：
+> 扩展：十步生命周期：（7步：`BeanPostProcessor`接口`before/after`方法）
 > ![alt text](image-19.png)
 
 
@@ -189,7 +189,7 @@ public class AppConfig {
   ```java
   @Configuration
   @ComponentScan("com.example")
-  @EnableAspectJAutoProxy(proxyTargetClass=true) // 开启AOP注解驱动支持
+  @EnableAspectJAutoProxy(proxyTargetClass=true) // 强制CGLib代理机制：类似继承
   public class AppConfig {}
   ```
 
@@ -241,4 +241,257 @@ public class MyAdvice {
 > - 可以调用`joinPoint.proceed()`方法，执行目标方法。
 
 ## Spring对事务的处理
+### 事务管理API
+- Spring事务管理API是Spring框架提供的用于管理事务的API。
+- Spring事务管理API的核心是`PlatformTransactionManager`接口。
+- `PlatformTransactionManager`接口定义了Spring事务管理的基本操作。
+- Spring事务管理API的实现有：
+  - `DataSourceTransactionManager`：用于管理基于JDBC的事务。
+  - `JtaTransactionManager`：用于管理基于分布式的事务。
 
+### 注释
+- `@EnableTransactionManagement`
+- `@Transactional`
+```java
+@Configuration
+@EnableTransactionManagement
+@ComponentScan("com.example")
+public class AppConfig {
+}
+
+public class TransactionalManager {
+    @Autowired
+    private DataSource dataSource;
+
+    @Bean
+    public PlatformTransactionManager transactionManager(DataSource dataSource) {
+        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
+        transactionManager.setDataSource(dataSource);
+        return transactionManager;
+    }
+}
+
+@Service
+public class BookService {
+    @Autowired
+    private BookDao bookDao;
+
+    @Transactional
+    public void addBook() {
+        bookDao.add();
+    }
+}
+```
+
+### 事务属性
+#### 传播行为
+![alt text](image-22.png)
+
+#### 隔离级别
+![alt text](image-23.png)
+
+## Spring-MyBatis
+### 概述
+- Spring-MyBatis是Spring框架与 MyBatis框架的整合。
+- [请看官网](https://mybatis.org/spring/zh_CN/index.html)
+
+### 基本使用
+- `SqlSessionFactoryBean`：用于创建SqlSessionFactory的Bean。
+- `SqlSessionTemplate`：SqlSession升级版，提供更方便的操作方式与生命管理。
+- `SqlSessionDaoSupport`：用于提供SqlSession。
+- ==如今，SqlSession已经不必我们手动创建，皆由Spring-MyBatis自动帮我们管理。==
+
+```java
+@Configuration
+public class DBConfig {
+    @Bean
+    public DataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/test");
+        dataSource.setUsername("root");
+        dataSource.setPassword("root");
+        return dataSource;
+    }
+
+    @Bean
+    public SqlSessionFactoryBean sqlSessionFactoryBean(DataSource dataSource) {
+        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+        sqlSessionFactoryBean.setDataSource(dataSource);
+        return sqlSessionFactoryBean;
+    }
+
+    // @MapperScan注解也可用于扫描Mapper接口
+    @Bean
+    public MapperScannerConfigurer mapperScannerConfigurer() {
+        MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
+        mapperScannerConfigurer.setBasePackage("com.example.mapper");
+        return mapperScannerConfigurer;
+    }
+}
+
+@Service
+@Transactional
+public class BookService {
+    @Autowired
+    private sqlMapper sqlMapper; 
+
+    public void addBook() {
+        sqlMapper.addBook();
+    }
+}
+```
+
+> 上边代码中，并未显式构建SqlSession和使用Mapper实现类，皆是由Spring-MyBatis自动管理。
+
+
+## SpringMVC
+### 概述
+SpringMVC是Spring框架中的一个模块，它是一个基于Java的MVC框架，与Servlet技术相同，是构建Web应用的主流框架。
+![alt text](image-24.png)
+
+### DispatcherServlet
+**DispatcherServlet是SpringMVC框架为我们提供的最核心的类，它是整个SpringMVC框架的前端控制器，负责接收HTTP请求、将请求路由到处理程序、处理响应信息，最终将响应返回给客户端。**
+
+```java
+@Configuration
+@ComponentScan("com.example")
+public class AppConfig {
+}
+
+// 存在专门为全注解服务的AbstractAnnotationConfigDispatcherServletInitializer类
+// 继承该类，只要传入配置类即可，方便很多。
+public class MyWebInitializer extends AbstractDispatcherServletInitializer {
+    // 根据配置类创建SpringMVC的前端控制器
+    @Override
+    protected WebApplicationContext createRootApplicationContext() {
+        AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
+        context.register(AppConfig.class);
+        return context;
+    }
+
+    @Override
+    protected WebApplicationContext createServletApplicationContext() {
+        return null;
+    }
+
+    // 配置DispatcherServlet的url映射 "/"表示除了"*.jsp/*.html"等静态资源外，所有请求都由DispatcherServlet处理
+    @Override
+    protected String[] getServletMappings() {
+        return new String[]{"/"};
+    }
+
+    // 配置DispatcherServlet的过滤器
+    @Override
+    protected Filter[] getServletFilters() {
+        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+        characterEncodingFilter.setEncoding("UTF-8");
+        return new Filter[]{characterEncodingFilter};
+    }
+}
+```
+> 配置SpringMVC的前端控制器，并配置DispatcherServlet的url映射。
+
+
+> Tomcat在启动时会扫描Web应用的`web.xml`文件或Java配置类，以发现并加载`DispatcherServlet`。
+> 主要流程：
+> ![alt text](image-27.png)
+
+
+### Bean加载控制
+![alt text](image-25.png)
+![alt text](image-26.png)
+
+
+### 请求参数传递
+- `@RequestParam`：用于从请求参数中获取数据。
+- `@RequestHeader`：用于从请求头中获取数据。
+- `@RequestBody`：用于从请求体中获取数据(一个方法内只能使用一次)。
+- `@CookieValue`：用于从Cookie中获取数据。
+- `@EnableWebMvc`：开启SpringMVC的注解驱动支持(JSON对象转换为Bean)。
+  - 传入JSON对象时，记得导入`jackson-databind/core/annotations`依赖。
+- `@DateTimeFormat`：用于格式化日期参数。
+  - 底层是由`Converter`实现的，`Converter`是类型转换器。
+
+
+### 响应结果
+- `@ResponseBody`：用于将方法的返回值作为响应体返回给客户端。
+  - 如不使用：则返回的是一个视图，如HTML、JSP等页面。
+  - 如使用：则将返回值按类型自动打包进响应体中（`Converter`）。
+
+### Request域数据共享
+1. 原始Servlet API处理
+2. SpringMVC的`Model`、`Map`或`ModelMap`形参
+    ```java
+    @Controller
+    public class BookController {
+        @RequestMapping("/addBook")
+        public String addBook(Book book, Model model) {
+            // 向Model中添加数据
+            model.addAttribute("book", book);
+            // 转发到视图
+            return "success";
+        }
+    }
+    ```
+> `Map`、`Model`和`ModelMap`三者关系：
+> ==表面上使用了不同的接口和不同的类，实际上底层都使用了一个对象`BindingAwareModelMap`==
+
+3. 使用`ModelAndView`
+    ```java
+    @Controller
+    public class BookController {
+      @RequestMapping("/addBook")
+      public ModelAndView addBook(Book book) {
+        // 创建ModelAndView对象
+        ModelAndView modelAndView = new ModelAndView();
+        // 设置视图名
+        modelAndView.setViewName("success");
+        // 向ModelAndView中添加数据
+        modelAndView.addObject("book", book);
+        return modelAndView;
+      }
+    }
+    ```
+> 不管用什么方法，底层都会返回**ModelAndView对象**
+
+
+### Session域数据共享
+- 使用Servlet API中的`HttpSession`
+- `@SessionAttributes`注解
+  ```java
+  @Controller
+  @SessionAttributes(value = "book") // "book"存放在Session域中
+  public class BookController {
+    @RequestMapping("/addBook")
+    public ModelAndView addBook(Book book) {
+      ModelAndView modelAndView = new ModelAndView();
+      modelAndView.setViewName("success");
+      modelAndView.addObject("book", book);
+      return modelAndView;
+    }
+  }
+  ```
+
+### Application域数据共享
+- 使用Servlet API中的`ServletContext`
+
+### 从DispatcherServlet到View
+![alt text](image-28.png)
+
+
+### 转发与重定向
+```java
+@Controller
+public class MyController {
+  @RequestMapping("/a")
+  public String aHandler() {
+    return "forward:/b"; // "redirect:/b" 重定向
+  }
+
+  @RequestMapping("/b")
+  public String bHandler() {
+    return "index";
+  }
+}
+```
