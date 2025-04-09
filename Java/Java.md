@@ -2013,6 +2013,7 @@ Function<Integer, Person[]> function1 = Person[]::new;
   - `anyMatch(Predicate<? super T> predicate)`：判断是否有元素满足条件。
   - `allMatch(Predicate<? super T> predicate)`：判断所有元素是否满足条件。
 > Optional<?>类是Java8中引入的新类，用于解决空指针异常。可以用过get()获取元素。
+> OptionalXX可以用getAsXXX()方法获取值。
 
 ### 其他
 - try-with-resources：自动关闭资源。

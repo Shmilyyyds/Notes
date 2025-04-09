@@ -350,6 +350,32 @@ public class BookService {
 SpringMVC是Spring框架中的一个模块，它是一个基于Java的MVC框架，与Servlet技术相同，是构建Web应用的主流框架。
 ![alt text](image-24.png)
 
+### MVC配置
+```java
+// 相当于SpringConfig.xml
+@Configuration
+@ComponentScan("com.example")
+@EnableWebMvc // 开启SpringMVC的注解驱动支持
+public class AppConfig implements WebMvcConfigurer {
+    // 配置视图控制器：URL与视图资源（需要HTML语法或配置了相关的视图解析器）直接映射，不经过Controller
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("index");
+    }
+
+    // 配置视图解析器：下方配置的是默认的JSP视图解析器
+    @Bean
+    public ViewResolver viewResolver() {
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setPrefix("/WEB-INF/views/");
+        viewResolver.setSuffix(".jsp");
+        return viewResolver;
+    }
+}
+```
+> 自己配置需要实现WebMvcConfigurer接口，并重写相关方法。
+> 如果不实现，则使用默认配置。
+
 ### DispatcherServlet
 **DispatcherServlet是SpringMVC框架为我们提供的最核心的类，它是整个SpringMVC框架的前端控制器，负责接收HTTP请求、将请求路由到处理程序、处理响应信息，最终将响应返回给客户端。**
 
@@ -359,6 +385,7 @@ SpringMVC是Spring框架中的一个模块，它是一个基于Java的MVC框架�
 public class AppConfig {
 }
 
+// 相当于web.xml
 // 存在专门为全注解服务的AbstractAnnotationConfigDispatcherServletInitializer类
 // 继承该类，只要传入配置类即可，方便很多。
 public class MyWebInitializer extends AbstractDispatcherServletInitializer {
@@ -495,3 +522,41 @@ public class MyController {
   }
 }
 ```
+
+
+### 静态资源的请求处理
+**配置Tomcat的`DefaultServlet`处理静态资源请求**
+
+
+### RESTFul
+#### 概述
+![alt text](image-29.png)
+
+#### 使用
+- URL:`"/user/{var_name}"`
+- `@PathVariable`：用于从路径中获取数据。
+```java
+@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
+@ResponseBody
+public User getUser(@PathVariable("id") int id) {
+    // 根据id查询用户信息
+    return userDao.getUser(id);
+}
+```
+
+
+#### 前端发送PUT、DELETE请求
+使用隐藏域，Spring中会处理披着`POST`请求的`PUT`和`DELETE`请求。
+```html
+<form action="/user/1" method="post">
+  <input type="hidden" name="_method" value="PUT">
+  <input type="submit" value="修改">
+</form>
+
+<form action="/user/1" method="post">
+  <input type="hidden" name="_method" value="DELETE">
+  <input type="submit" value="删除">
+</form>
+```
+> ==`@EnableWebMvc`注解开启注解驱动支持，可以自动处理隐藏域的`_method`参数。(必须是这个名字)==
+

@@ -347,8 +347,9 @@ from -> where -> group by -> having -> select -> order by -> limit
 
 ## 函数
 ### 字符串函数
-- `left`/`right`：从字符串左边/右边截取指定长度的字符
-- `length`：返回字符串长度
+- `left(str, len)`/`right(str, len)`：从字符串左边/右边截取指定长度的字符
+- `length(str)`：返回字符串长度
+- `group_concat([distinct] colHeadName [order by] [separator])`：将多行数据合并为一行，并用指定分隔符分隔
 ![alt text](image-1.png)
 
 
