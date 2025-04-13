@@ -302,6 +302,7 @@ public class BookService {
 - ==如今，SqlSession已经不必我们手动创建，皆由Spring-MyBatis自动帮我们管理。==
 
 ```java
+// 相当于MybatisConfig.xml
 @Configuration
 public class DBConfig {
     @Bean
@@ -355,6 +356,7 @@ SpringMVC是Spring框架中的一个模块，它是一个基于Java的MVC框架�
 // 相当于SpringConfig.xml
 @Configuration
 @ComponentScan("com.example")
+@MutipartConfig
 @EnableWebMvc // 开启SpringMVC的注解驱动支持
 public class AppConfig implements WebMvcConfigurer {
     // 配置视图控制器：URL与视图资源（需要HTML语法或配置了相关的视图解析器）直接映射，不经过Controller
@@ -371,9 +373,21 @@ public class AppConfig implements WebMvcConfigurer {
         viewResolver.setSuffix(".jsp");
         return viewResolver;
     }
+
+    // 配置拦截器
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new BasicInterceptor()).addPathPatterns("/**").order(0);
+    }
+
+    // 配置静态资源处理
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
+    }
 }
 ```
-> 自己配置需要实现WebMvcConfigurer接口，并重写相关方法。
+> 自己配置需要实现WebMvcConfigurer接口，并重写相关方法（视图解析器、视图控制器、拦截器等）。
 > 如果不实现，则使用默认配置。
 
 ### DispatcherServlet
@@ -389,17 +403,18 @@ public class AppConfig {
 // 存在专门为全注解服务的AbstractAnnotationConfigDispatcherServletInitializer类
 // 继承该类，只要传入配置类即可，方便很多。
 public class MyWebInitializer extends AbstractDispatcherServletInitializer {
-    // 根据配置类创建SpringMVC的前端控制器
+    // 根据Spring配置类配置
     @Override
     protected WebApplicationContext createRootApplicationContext() {
+        return null;
+    }
+
+    // 根据SpringMVC配置类配置DispatcherServlet
+    @Override
+    protected WebApplicationContext createServletApplicationContext() {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
         context.register(AppConfig.class);
         return context;
-    }
-
-    @Override
-    protected WebApplicationContext createServletApplicationContext() {
-        return null;
     }
 
     // 配置DispatcherServlet的url映射 "/"表示除了"*.jsp/*.html"等静态资源外，所有请求都由DispatcherServlet处理
@@ -434,7 +449,9 @@ public class MyWebInitializer extends AbstractDispatcherServletInitializer {
 - `@RequestParam`：用于从请求参数中获取数据。
 - `@RequestHeader`：用于从请求头中获取数据。
 - `@RequestBody`：用于从请求体中获取数据(一个方法内只能使用一次)。
+  - 如果传来的请求体是JSON对象，则`Converter`自动将请求体中的JSON对象转换为Java对象。
 - `@CookieValue`：用于从Cookie中获取数据。
+- `@PathVariable`：用于从路径中获取数据。
 - `@EnableWebMvc`：开启SpringMVC的注解驱动支持(JSON对象转换为Bean)。
   - 传入JSON对象时，记得导入`jackson-databind/core/annotations`依赖。
 - `@DateTimeFormat`：用于格式化日期参数。
@@ -445,6 +462,11 @@ public class MyWebInitializer extends AbstractDispatcherServletInitializer {
 - `@ResponseBody`：用于将方法的返回值作为响应体返回给客户端。
   - 如不使用：则返回的是一个视图，如HTML、JSP等页面。
   - 如使用：则将返回值按类型自动打包进响应体中（`Converter`）。
+
+### RequestEntity与ResponseEntity类
+- `RequestEntity`：封装HTTP请求信息，包括请求方法、URI、请求头、请求参数等。
+- `ResponseEntity`：封装HTTP响应信息，包括响应状态码、响应头、响应体等。
+> 两者都存在泛型，可以作用于请求体或响应体，方便地处理数据类型。
 
 ### Request域数据共享
 1. 原始Servlet API处理
@@ -559,4 +581,67 @@ public User getUser(@PathVariable("id") int id) {
 </form>
 ```
 > ==`@EnableWebMvc`注解开启注解驱动支持，可以自动处理隐藏域的`_method`参数。(必须是这个名字)==
+
+### 文件上传与下载
+#### 文件上传
+![alt text](image-30.png)
+
+#### 文件下载
+![alt text](image-31.png)
+
+
+### 异常处理
+```java
+@ControllerAdvice
+public class ExceptionsController {
+
+    @ExceptionHandler
+    public String handleExceptions(Exception e, Model model) {
+        model.addAttribute("Exception", e);
+        e.printStackTrace();
+        return "exceptionView";
+    }
+}
+```
+> `@ControllerAdvice`注解用于声明一个控制器增强器，可以处理控制器抛出的异常。
+> `@ExceptionHandler`注解用于声明一个异常处理方法，可以处理指定类型的异常。
+> `Model`参数用于向视图传递数据。
+> 如无定义，则会调用默认的`DefalutHandlerExceptionResolver`。
+
+
+### Interceptor拦截器
+![alt text](image-32.png)
+```java
+@Configuration
+@ComponentScan("com.kanade.controller")
+@MultipartConfig
+@EnableWebMvc
+public class SpringMVCConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("index");
+    }
+
+    @Bean
+    public ViewResolver viewResolver() {
+        InternalResourceViewResolver internalResourceViewResolver = new InternalResourceViewResolver();
+        internalResourceViewResolver.setViewClass(JstlView.class);
+        internalResourceViewResolver.setPrefix("/WEB-INF/views/");
+        internalResourceViewResolver.setSuffix(".jsp");
+        return internalResourceViewResolver;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new BasicInterceptor()).addPathPatterns("/**").excludePathPatterns("/login").order(0);
+    }
+}
+```
+
+
+### 构建过程
+![alt text](image-33.png)
+> 概述图片
+> ![alt text](image-34.png)
 

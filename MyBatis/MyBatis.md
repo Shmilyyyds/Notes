@@ -233,3 +233,41 @@ public static void main(String[] args) throws IOException {
 
 ## **注解开发**
 ![alt text](image-8.png)
+> @Results注解：用于配置结果集，可以配置多个，每个结果集对应一个`resultType`
+> @Results({
+>   @Result(property = "id", column = "id"),
+>    @Result(property = "name", column = "name")
+> })
+
+## 高级映射
+### 多对一
+![alt text](image-9.png)
+
+### 一对多
+![alt text](image-23.png)
+
+## 缓存
+### 概述
+![alt text](image-24.png)
+
+### 一级缓存
+- 存放在SqlSession对象中，一个SqlSession对应一个缓存
+- **销毁缓存**
+  - `sqlSession.clearCache()`：清空当前SqlSession缓存
+  - 执行了UPDATE、INSERT、DELETE语句
+
+### 二级缓存
+- 存放在SqlSessionFactory对象中
+- **配置**
+  ![alt text](image-25.png)
+- **销毁缓存**
+  - 执行了UPDATE、INSERT、DELETE语句
+- **设置**
+  ![alt text](image-26.png)
+
+## 逆向工程
+依照数据库表生成对应的实体类，并生成对应的Mapper接口和Mapper.xml文件。
+
+---
+
+# MyBatis-Plus

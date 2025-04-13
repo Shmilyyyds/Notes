@@ -198,7 +198,7 @@ select employee_id from employees where employee_id in (1001, 1002);
 ```
 ### 模糊查询
 **语法格式：**`select 字段名 from 表名 where 字段名 like '模式串(通配符表达式)';`
-
+> 正则表达式：`rlike`或`regxp`
 #### 通配符表达式
 - `%`：匹配任意字符串
 - `_`：匹配单个字符
