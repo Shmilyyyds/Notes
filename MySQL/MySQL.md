@@ -349,6 +349,7 @@ from -> where -> group by -> having -> select -> order by -> limit
 ### 字符串函数
 - `left(str, len)`/`right(str, len)`：从字符串左边/右边截取指定长度的字符
 - `length(str)`：返回字符串长度
+- `char_length(str)`：返回字符串字符长度
 - `group_concat([distinct] colHeadName [order by] [separator])`：将多行数据合并为一行，并用指定分隔符分隔
 ![alt text](image-1.png)
 
@@ -467,7 +468,9 @@ select 字段列表 from 表2...
 ```
 > 要求列数相同且注意：==UNION会首先合并结果，然后才考虑结果集的排序和限制。==
 
-
+#### 视图
+- `select 字段列表 from 视图名`：使用视图查询数据
+![alt text](image-18.png)
 
 ## 事务
 **事务是指作为一个整体，对数据库进行操作的一组操作。这些操作要么同时成功，要么同时失败。**
@@ -509,6 +512,8 @@ commit;
 # 回滚事务
 rollback;
 ```
+
+
 
 ### 事务特性
 - **原子性（Atomicity）**：事务是一个不可分割的工作单位，事务中包括的诸操作要么全部成功，要么全部失败。

@@ -62,6 +62,7 @@ $$
 ![alt text](image-3.png)
 
 #### 系统调用
+![alt text](image-9.png)
 ![alt text](image-4.png)
 > 陷入指令是非特权指令，在CPU用户态执行。
 
@@ -106,3 +107,114 @@ $$
 
 #### 特征
 ![alt text](image-8.png)
+
+#### 状态与转换
+![alt text](image-10.png)
+
+##### 进程的组织
+- 链式方式
+- 索引方式
+
+#### 进程控制
+##### 原语的原子性
+![alt text](image-11.png)
+
+##### 创建原语
+- 申请空白PCB
+- 为新进程分配资源
+- 初始化PCB
+- 将PCB插入就绪队列
+
+##### 撤销原语
+- 从PCB集合中找到指定PCB
+- 若进程正在运行，立即剥夺CPU，将CPU分配给其他进程
+- 终止其所有子进程
+- 回收其资源到父进程或操作系统
+- 删除PCB
+
+##### 阻塞和唤醒原语
+![alt text](image-12.png)
+
+
+##### 切换原语
+![alt text](image-13.png)
+
+
+#### 进程通信 PIC
+##### 共享存储
+![alt text](image-14.png)
+> 分为数据结构、存储区两种。
+
+##### 消息传递
+- 直接通信
+![alt text](image-15.png)
+- 间接通信
+![alt text](image-16.png)
+
+
+##### 管道通信
+![alt text](image-17.png)
+
+
+### 线程
+#### 与进程的区别
+![alt text](image-18.png)
+
+#### 特点
+![alt text](image-19.png)
+
+#### 实现方式与模型
+![alt text](image-20.png)
+
+### 调度
+#### 分类、层次
+- 高级调度
+![alt text](image-21.png)
+- 低级调度
+![alt text](image-22.png)
+- 中级调度
+![alt text](image-23.png)
+
+> 七状态状态：
+> ![alt text](image-24.png)
+
+
+> 三层调度的对比
+> ![alt text](image-25.png)
+
+
+#### 时机与切换
+![alt text](image-26.png)
+
+
+#### 调度算法
+##### 评估标准
+![alt text](image-27.png)
+
+##### 先来先服务 FCFS
+![alt text](image-28.png)
+
+
+##### 短作业优先 SJF
+![alt text](image-29.png)
+
+##### 高响应比优先 HRRN
+![alt text](image-30.png)
+
+
+##### 时间片轮转 RR
+![alt text](image-31.png)
+
+##### 优先级调度
+![alt text](image-32.png)
+> ![alt text](image-33.png)
+
+
+##### 多级反馈队列调度
+![alt text](image-34.png)
+
+![alt text](image-35.png)
+
+
+##### 多级队列调度
+![alt text](image-36.png)

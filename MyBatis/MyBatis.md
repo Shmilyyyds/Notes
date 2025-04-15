@@ -271,3 +271,12 @@ public static void main(String[] args) throws IOException {
 ---
 
 # MyBatis-Plus
+> [官网](https://baomidou.com/)
+## 入门步骤
+![alt text](image-27.png)
+
+## 常用注解
+- `@TableName`：指定表名
+- `@TableId`：指定主键
+- `@TableField`：指定普通字段名
+> ![alt text](image-28.png)
