@@ -41,3 +41,17 @@
 - ![alt text](image-9.png)
 - ![alt text](image-10.png)
 - ![alt text](image-11.png)
+
+## 配置文件分类
+![alt text](image-12.png)
+> `file`指打包后`target`目录下
+> `classpath`指项目结构`src/main/resources`目录下
+
+## 整合第三方工具
+### JUnit
+![alt text](image-13.png)
+
+### MyBatis
+![alt text](image-14.png)
+> 使用`@Mapper`注释，标注要MyBatis代理的Mapper接口
+

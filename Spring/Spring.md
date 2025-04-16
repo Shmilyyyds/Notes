@@ -318,6 +318,7 @@ public class DBConfig {
     @Bean
     public SqlSessionFactoryBean sqlSessionFactoryBean(DataSource dataSource) {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+        sqlSessionFactoryBean.setTypeAliasesPackage("com.example.pojo");
         sqlSessionFactoryBean.setDataSource(dataSource);
         return sqlSessionFactoryBean;
     }

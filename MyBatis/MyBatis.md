@@ -279,4 +279,43 @@ public static void main(String[] args) throws IOException {
 - `@TableName`：指定表名
 - `@TableId`：指定主键
 - `@TableField`：指定普通字段名
+- `@TableLogic(value = "1", delval = "0")`：指定逻辑删除字段 `value`表示逻辑未删除值，`delval`表示逻辑删除值
 > ![alt text](image-28.png)
+
+## CRUD
+![alt text](image-29.png)
+
+### 分页查询
+1. 配置拦截器
+  ```java
+  public class MpConfig {
+  @Bean
+    public MybatisPlusInterceptor mybatisPlusInterceptor() {
+        // 定义Mp拦截器
+        MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
+        // 添加具体拦截器
+        mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor());
+        return mybatisPlusInterceptor;
+    }
+  }
+```
+
+2. 调用分页查询
+```java
+Page<User> page = new Page<>(1, 10);
+IPage<User> userIPage = userMapper.selectPage(page, null);
+```
+
+### 条件查询
+![alt text](image-30.png)
+![alt text](image-31.png)
+> 链式编程默认`and`，可以使用`or()`改变。
+> `null`值处理：![alt text](1744795120386.png)
+
+### 查询投影
+![alt text](image-32.png)
+> 建议用传统MyBatis
+
+### 逻辑删除
+![alt text](image-33.png)
+> 推荐使用全局配置：![alt text](image-34.png)
