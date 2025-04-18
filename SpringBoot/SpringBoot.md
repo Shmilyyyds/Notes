@@ -55,3 +55,5 @@
 ![alt text](image-14.png)
 > 使用`@Mapper`注释，标注要MyBatis代理的Mapper接口
 
+
+

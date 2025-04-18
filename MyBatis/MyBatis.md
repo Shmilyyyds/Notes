@@ -231,7 +231,7 @@ public static void main(String[] args) throws IOException {
 ## Mapper的参数传递
 ![alt text](image-7.png)
 
-## **注解开发**
+## 注解开发
 ![alt text](image-8.png)
 > @Results注解：用于配置结果集，可以配置多个，每个结果集对应一个`resultType`
 > @Results({
