@@ -310,12 +310,12 @@ IPage<User> userIPage = userMapper.selectPage(page, null);
 ![alt text](image-30.png)
 ![alt text](image-31.png)
 > 链式编程默认`and`，可以使用`or()`改变。
-> `null`值处理：![alt text](1744795120386.png)
+> `null`值处理：![alt text](image-32.png)
 
 ### 查询投影
-![alt text](image-32.png)
+![alt text](image-33.png)
 > 建议用传统MyBatis
 
 ### 逻辑删除
-![alt text](image-33.png)
+![alt text](image-35.png)
 > 推荐使用全局配置：![alt text](image-34.png)

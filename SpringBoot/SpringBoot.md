@@ -1,4 +1,5 @@
 # Spring Boot
+> 神一般的存在。
 ## 起步依赖
 ![alt text](image.png)
 
@@ -9,13 +10,18 @@
 ### 基本概述
 ![alt text](image-2.png)
 > 数组类似MARKDOWN中的列表
->
 > ```yaml
 > # 数组
 > fruits:
 >   - apple
 >   - banana
 >   - orange
+> # 使用变量
+> baseDir: /usr/local/
+> tmpDir: ${baseDir}/tmp
+> 
+> # 转义字符 双引号括住会解析
+> lesson: "Spring Boot\n\nYAML\n\n"
 > ```
 
 > ==优点：容易阅读、容易与脚本语言交互、重数据轻格式==
