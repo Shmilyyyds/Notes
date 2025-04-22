@@ -110,7 +110,7 @@
 #### 基本用法
 - `@ConfigurationProperties(prefix = "xxxx")`：读取配置文件中的属性，并绑定到Bean中
 - `@EnableConfigurationProperties(xxxx.class)`：启用配置文件绑定功能
-> `@EnableConfigurationProperties`是告诉配置类，要从`xxxx.class`类中读取属性绑定到Bean中，**此时已经绑定了一次！**
+> `@EnableConfigurationProperties`是告诉配置类，如果用到某个类就要从`xxxx.class`类中读取属性绑定到Bean中，**此时已经绑定了一次！**
 
 > 宽松绑定：`@ConfigurationProperties`注解允许JavaBean属性名与配置文件中的对应名宽松绑定。
 
@@ -124,4 +124,102 @@
 ![alt text](image-26.png)
 
 
+### Web开发
+#### 简介
+SpringBoot基本都帮我们配置好了。
+
+#### 静态资源
+- `classpath:/static(or /public or /resources or /META-INF/resources)`：将静态资源放在该目录下。
+    - 默认静态映射：`/**`：先去找Controller，找不到就交给静态资源处理器。
+    - 配置静态映射路径：`spring.mvc.static-path-pattern`
+    - 修改静态资源文件夹路径：`spring.mvc.resource.static-locations: [classpath:/new_path]`
+    - 访问`webjars`：`http://localhost:8080/webjars/jquery/3.5.1/jquery.min.js`(按照依赖中文件路径)
+
+
+#### Index页面
+- 静态资源路径下放置`index.html`文件，访问`http://localhost:8080/`会自动跳转到该页面。
+- `@Controller`处理`\index`请求，返回`index.html`页面。
+
+#### favicon.ico
+- 静态资源路径下放置`favicon.ico`文件。
+
+
 ### 测试
+#### 启动Web服务
+![alt text](image-28.png)
+
+#### 虚拟请求测试
+![alt text](image-29.png)
+
+#### 模拟测试匹配
+![alt text](image-30.png)
+
+> 可以采用事务控制`@Transactional`防止测试类脏了数据库数据。
+
+
+#### 随机测试用例
+![alt text](image-31.png)
+
+
+### SQL解决方案
+#### 内嵌数据库
+![alt text](image-32.png)
+> 内嵌数据库，不需要安装数据库，启动速度快，适合测试环境。
+
+
+### NoSQL解决方案
+#### Redis
+![alt text](image-33.png)
+> 注意：StringRedisTemplate和RedisTemplate。
+
+
+### 缓存Cache
+- 导入Maven坐标`spring-boot-starter-cache`
+- 配置类注释`@EnableCaching`
+- 注解`@Cacheable(value = "cacheName", key = "#id")`缓存方法返回值
+> `#id`会自动匹配方法参数作为查询`cacheName`缓存的key值，若有则会直接返回。
+
+
+
+### 任务
+#### 概念
+![alt text](image-34.png)
+
+> Spring Task是一个轻量级的任务调度框架，可以用来代替Quartz等定时任务框架。
+> - `@EnableScheduling`：配置类注解开启定时任务功能
+> - `@Scheduled(cron = "*/5 * * * * *")`：注解配置定时任务，`cron`表达式表示每5秒执行一次
+
+
+
+## 原理
+### Bean的加载方式
+![alt text](image-35.png)
+
+### 自动配置原理
+- `@SpringApplication`
+  - `@EnableAutoConfiguration`
+    - `@AutoConfigurationPackage`：自动配置包扫描（配置类所在的包）
+    - `@Import(AutoConfigurationImportSelector.class)`：先确定所有自动配置类（`META-INF/spring.factories`），然后根据`@Conditional`决定是否导入某个自动配置类
+> ImportSelector接口：`selectImports`方法返回所有需要导入的配置类。是一种批量导入Bean的方式。
+
+![alt text](image-36.png)
+
+> 可以自己配置，自己配置优先级大于自动配置，会覆盖。
+> ![alt text](image-37.png)
+
+> SpringBoot最佳实践
+> ![alt text](image-38.png)
+
+
+### 启动流程
+#### 阶段一：加载各种配置信息，初始化各种配置对象
+![alt text](image-39.png)
+- `ResourceLoader`：资源加载器，用于加载各种配置文件，包括`application.properties`、`application.yml`等。
+- `webApplicationType`：Web应用类型，`NONE`表示非Web应用，`SERVLET`表示Servlet应用，`REACTIVE`表示Reactive应用。
+
+#### 阶段二：初始化容器
+创建容器，加载配置。
+
+---
+> ![alt text](image-40.png)
+> ![alt text](image-41.png)

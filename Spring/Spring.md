@@ -93,6 +93,7 @@
 
 ## 注解配置
 ### 注入
+- `@Confiuration(proxyBeanMethods=true)`：proxyBeanMethods=true可以保障调用此方法得到对象是从容器中获取的，原理是CGLIB依照单例模式产生了代理对象
 - 配置文件转化为类
 ![alt text](image-9.png)
 - 直接在Bean类上注解
@@ -101,10 +102,12 @@
     - @Service("ID")
     - @Controller("ID")
   - @Scope("singleton/prototype")
-
+  - @Conditional：根据条件判断是否加载Bean
 - 类中方法注解
   - @PostConstruct
   - @PreDestroy
+- 加载xml配置文件中的Bean`@ImportResource("classpath:spring.xml")`
+
 
 - 依赖注入注解
 ![alt text](image-10.png)
@@ -115,7 +118,6 @@
 
 - 加载properties文件
 ![alt text](image-11.png)
-
 
 ```java
 @Component
@@ -452,6 +454,7 @@ public class MyWebInitializer extends AbstractDispatcherServletInitializer {
 - `@RequestBody`：用于从请求体中获取数据(一个方法内只能使用一次)。
   - 如果传来的请求体是JSON对象，则`Converter`自动将请求体中的JSON对象转换为Java对象。
 - `@CookieValue`：用于从Cookie中获取数据。
+- `@RequestAttribute`：用于从请求域中获取数据（多用于转发）。
 - `@PathVariable`：用于从路径中获取数据。
 - `@EnableWebMvc`：开启SpringMVC的注解驱动支持(JSON对象转换为Bean)。
   - 传入JSON对象时，记得导入`jackson-databind/core/annotations`依赖。

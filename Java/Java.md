@@ -935,6 +935,7 @@ while (iterator.hasNext()) {
 - `ensureCapacity(int minCapacity)`：确保容量。
 - `trimToSize()`：缩减容量。
 - `toArray()`：转换为数组。
+- `toArray(T[] arr)`：指定数组类型。
 
 #### Set 
 **常用方法基本与List相同，但无`get`有`contains`**
