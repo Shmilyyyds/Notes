@@ -218,3 +218,59 @@ $$
 
 ##### 多级队列调度
 ![alt text](image-36.png)
+
+
+### 同步与互斥
+#### 概念
+![alt text](image-37.png)
+
+#### 进程互斥实现方法
+###### 软件方法
+- 单标志法
+- 双标志先检查法
+- 双标志后检查法
+- Peterson算法
+  ![alt text](image-38.png)
+
+
+
+###### 硬件方法
+1. 中断
+![alt text](image-39.png)
+
+2. TestAndSet指令
+![alt text](image-40.png)
+
+3. Swap指令
+![alt text](image-41.png)
+
+
+#### 信号量机制
+##### 概念
+![alt text](image-42.png)
+
+##### 信号量解决互斥、同步问题
+![alt text](image-43.png)
+
+
+#### 死锁
+###### 概述
+![alt text](image-44.png)
+
+###### 预防死锁
+![alt text](image-45.png)
+
+
+###### 避免死锁
+银行家算法：
+![alt text](image-46.png)
+
+
+###### 检测和解除死锁
+- 检测死锁
+![alt text](image-47.png)
+
+- 解除死锁
+  - 资源剥夺法
+  - 撤销进程法
+  - 进程回退法
