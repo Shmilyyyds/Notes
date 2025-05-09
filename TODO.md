@@ -3,35 +3,41 @@
 - [x] 计算机组成原理
 - [ ] 操作系统
 - [ ] 计算机网络
-- [ ] JaveSE
-  - [x] 其他基础部分
-  - [x] JUBC
+- [ ] JaveEE
+  - [x] 基础部分
+  - [ ] Java新特性
   - [ ] JUC
-  - [x] 正则表达式
-  - [ ] Date/Time API
-  - [x] Stream API
   - [ ] JVM
 - [ ] MySQL
   - [x] SQL
   - [ ] 进阶
 - [x] Maven
-- [x] MyBatis
-- [ ] git
+- [x] git
 - [ ] Linux
-- [ ] JavaWeb
-  - [x] HTML
-  - [x] CSS
-  - [x] JavaScript
-  - [x] Tomcat
+  - [x] 基础命令
+  - [ ] 系统管理
+- [x] JavaWeb
+  - [x] 前端基础
   - [x] xml
-  - [ ] logback
-- [ ] SSM
-  - [ ] Spring
-  - [ ] SpringMVC
-  - [ ] MyBatis-Plus
-- [ ] SpringBoot
-- [ ] SpringCloud
-- [ ] docker
+  - [x] logback
+  - [x] Servlet、Fliter、Listener
+  - [x] Tomcat
+  - [x] Cookie
+  - [x] Session
+
+- [x] SSMP
+  - [x] Spring
+  - [x] SpringMVC
+  - [x] MyBatis
+  - [x] MyBatis-Plus
+- [x] SpringBoot
 - [ ] Redis
 - [ ] RabbitMQ
-- [ ] Dubbo
+- [ ] docker
+- [ ] SpringCloud
+- [ ] 项目
+- [ ] 刷题
+  - [x] 力扣hot100
+  - [x] 力扣sql基础50
+  - [ ] 其他
+- [ ] 面经八股
