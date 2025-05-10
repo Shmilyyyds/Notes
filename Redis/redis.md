@@ -261,3 +261,14 @@ public class RedissonService {
 
 #### 应用
 ![alt text](image-41.png)
+
+
+## 高级
+### 分布式缓存
+#### Redis持久化
+###### RDB持久化
+![alt text](image-42.png)
+
+![alt text](image-43.png)
+
+> ![alt text](image-44.png)
