@@ -56,10 +56,11 @@
 >   - 注册关闭钩子，在虚拟机退出前先关闭容器：`ConfigurableApplicationContext.registerShutdownHook()`
 
 > 扩展：十步生命周期：（7步：`BeanPostProcessor`接口`before/after`方法）
-> ![alt text](image-19.png)
+> ![alt text](image-35.png)
 
 
-
+### Aware接口
+`Aware`接口赋予了Bean更多自感知的能力，这些接口定义了一些回调方法，通过这些回调方法，Spring容器在初始化Bean时会将容器中的一些资源、状态、环境信息注入到Bean中，使Bean能够感知到这些信息并据此进行相应的操作。
 
 ### 注入
 - 基础类型（基本数据类型+String）注入：`value=""`

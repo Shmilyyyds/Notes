@@ -2,6 +2,8 @@
 ## 镜像和容器
 ![alt text](image.png)
 
+> ![alt text](image-11.png)
+
 ## 命令
 ### 基本解读
 ![alt text](image-1.png)
