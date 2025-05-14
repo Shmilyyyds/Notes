@@ -429,3 +429,110 @@ public class RedissonService {
 
 #### ZipList
 ![alt text](image-79.png)
+
+> ![alt text](image-80.png)
+
+
+#### QuickList
+![alt text](image-81.png)
+
+
+#### SkipList
+![alt text](image-82.png)
+
+> ![alt text](image-83.png)
+
+
+#### RedisObject
+![alt text](image-84.png)
+
+> ![alt text](image-85.png)
+
+#### 数据类型底层
+###### String
+![alt text](image-86.png)
+
+###### List
+- QuickList
+- ZipList
+- LinkedList
+
+###### Set
+- IntSet：所有数据都为整数时使用
+- Dict
+
+
+###### ZSet
+![alt text](image-87.png)
+
+> 当元素数量较小，每个元素的字节占用也较小时，会直接使用ZipList，而不是内存占用过多的Dict+SkipList。
+
+
+###### Hash
+- ZipList
+- Dict：元素数量较大时使用
+
+
+### 网络模型
+#### 阻塞/非阻塞IO
+###### 阻塞IO（Blocking IO）
+![alt text](image-88.png)
+###### 非阻塞IO（Non-Blocking IO）
+![alt text](image-89.png)
+
+#### IO多路复用
+###### 概述
+![alt text](image-90.png)
+
+###### 三种实现
+- select（基于bitMap）
+- poll（基于链表）
+- epoll
+![alt text](image-91.png)
+
+
+###### 事件通知机制
+![alt text](image-92.png)
+
+
+
+#### 信号驱动IO和异步IO
+###### 信号驱动IO
+![alt text](image-93.png)
+
+
+###### 异步IO
+![alt text](image-94.png)
+
+
+#### Redis网络模型
+###### Redis是单线程还是多线程？
+![alt text](image-95.png)
+
+> ![alt text](image-96.png)
+
+
+###### 流程概述
+![alt text](image-97.png)
+
+> ![alt text](image-98.png)
+
+
+### 通信协议
+![alt text](image-99.png)
+
+
+### 内存策略
+#### 过期策略
+###### RedisKey的TTL记录
+在RedisDB中通过一个Dict记录每个Key的TTL时间（==没设置就不会记录==）
+
+###### 过期删除策略
+- 惰性清理：每次访问Key时，检查是否过期，过期则删除。
+- 定期清理：每隔一段时间，扫描一次RedisDB，删除过期的Key。
+  - SLOW模式：SLOW模式执行频率默认为10，每次不超过25ms。
+  - FAST模式：执行频率不固定，但两次间隔不低于2ms，每次执行耗时不超过1ms。
+
+
+#### 内存回收策略
+![alt text](image-100.png)
