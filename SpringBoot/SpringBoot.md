@@ -77,6 +77,11 @@
 > 使用`@Mapper`注释，标注要MyBatis代理的Mapper接口
 
 
+#### Swagger
+![alt text](image-42.png)
+> ![alt text](image-43.png)
+>
+> ![alt text](image-44.png)
 ### 日志
 #### 使用
 ![alt text](image-19.png)

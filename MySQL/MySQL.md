@@ -576,3 +576,163 @@ rollback;
 > 选取InnoDB：对事务的完整性、并发条件下数据的一致性要求高，数据操作包含很多更新删除操作。
 > 选取MyISAM：应用以读取和插入操作为主。
 > 选取Memory：适合于临时数据，如缓存、队列等。
+
+
+## 索引
+### 概述
+![alt text](image-19.png)
+
+### 结构
+###### 基本概述
+![alt text](image-20.png)
+
+###### B+树索引
+![alt text](image-21.png)
+
+###### Hash索引
+![alt text](image-22.png)
+
+> ![alt text](image-23.png)
+> B+树非叶子节点仅存放键值，不存放数据；而B树存放。
+> 导致B+树一个节点（固定大小）能存放键的数目增多，意味着树的度数增大，树的高度减小，查询效率增大。
+
+
+### 分类
+###### 基础索引分类
+![alt text](image-24.png)
+
+###### InnoDB的索引
+![alt text](image-25.png)
+
+
+### 语法
+![alt text](image-26.png)
+
+> 如果没有对应索引，则会进行全表扫描。
+
+### 性能分析
+###### 查看执行频次
+![alt text](image-27.png)
+
+###### 慢查询日志
+![alt text](image-28.png)
+
+###### profile
+![alt text](image-29.png)
+![alt text](image-30.png)
+
+
+###### explain
+![alt text](image-31.png)
+![alt text](image-32.png)
+
+### 创建与使用
+#### 使用规则
+###### 最左前缀法则
+![alt text](image-33.png)
+
+###### 范围查询
+![alt text](image-34.png)
+
+###### 索引失效
+- 索引列上进行运算操作
+- 字符串不加引号
+- 模糊匹配符号右端
+- `or`条件连接的各列中存在无索引的列（因为不如直接单次遍历查询）
+- MySQL评估适合遍历扫描
+
+###### SQL提示
+![alt text](image-35.png)
+
+> 当单列索引和组合索引同时存在且满足要求时，MySQL会优先选择组合索引。
+
+###### 覆盖索引
+![alt text](image-36.png)
+
+###### 前缀索引
+![alt text](image-37.png)
+
+> 使用前缀索引一定会回表。
+
+
+## SQL优化
+### 插入数据
+![alt text](image-38.png)
+![alt text](image-39.png)
+
+> 主键优化：
+> ![alt text](image-40.png)
+> ![alt text](image-41.png)
+
+
+### order by优化
+![alt text](image-42.png)
+> ![alt text](image-43.png)
+
+### group by优化
+- 可以建立索引来优化
+
+### limit优化
+![alt text](image-44.png)
+
+### count优化
+![alt text](image-45.png)
+
+### update优化
+![alt text](image-46.png)
+
+## 存储对象
+### 视图
+###### 概述
+![alt text](image-47.png)
+
+###### 基本用法
+![alt text](image-48.png)
+
+###### cascaded && local
+![alt text](image-49.png)
+
+> 视图插入时，会对视图的依赖视图进行更新操作，如果依赖视图有`with check option`，则会进行检查。
+> cascaded相当于让自己的依赖视图都添加上`with check option`，local相当于只对自己添加`with check option`。
+
+
+###### 视图更新
+![alt text](image-50.png)
+
+### 存储过程
+###### 概述
+![alt text](image-51.png)
+> 相当于函数
+
+###### 基本用法
+![alt text](image-52.png)
+![alt text](image-53.png)
+
+###### 变量
+![alt text](image-54.png)
+
+> 如果没有特意指定，默认是SESSION会话变量
+> MySQL-Server重启后，所设置的全局变量会失效，如果想要永久保存可以在配置文件中配置。
+
+![alt text](image-55.png)
+![alt text](image-56.png)
+
+
+###### 进阶
+- 控制流程：`if [] then ... elseif [] then ... else ... end if`
+- 参数：`in/out/inout`
+- 循环：
+  - `while [] do ... end while`
+  - `repeat ... until [] end repeat`
+  - `[begin_label:]loop ...[leave/iterate] end loop [end_label]`
+- 游标,==相当于ResultSet==：
+![alt text](image-57.png)
+- 条件处理程序：
+![alt text](image-58.png)
+
+
+### 存储函数
+![alt text](image-59.png)
+
+
+### 触发器

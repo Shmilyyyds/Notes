@@ -231,6 +231,17 @@ public static void main(String[] args) throws IOException {
 ## Mapper的参数传递
 ![alt text](image-7.png)
 
+
+
+## PageHelper分页插件
+![alt text](image-36.png)
+
+> ![alt text](image-37.png)
+> ![alt text](image-38.png)
+
+### 常用方法
+- `PageHelper.startPage(pageNum, pageSize)`：底层维护了一个ThreadLocal<Page>对象，记录Page信息
+
 ## 注解开发
 ![alt text](image-8.png)
 > @Results注解：用于配置结果集，可以配置多个，每个结果集对应一个`resultType`
@@ -238,6 +249,7 @@ public static void main(String[] args) throws IOException {
 >   @Result(property = "id", column = "id"),
 >    @Result(property = "name", column = "name")
 > })
+
 
 ## 高级映射
 ### 多对一
