@@ -735,4 +735,115 @@ rollback;
 ![alt text](image-59.png)
 
 
+
 ### 触发器
+###### 概述
+![alt text](image-60.png)
+
+
+###### 基本用法
+![alt text](image-61.png)
+
+
+## 锁
+### 全局锁
+![alt text](image-62.png)
+> ![alt text](image-63.png)
+>
+
+### 表级锁
+###### 表锁
+![alt text](image-64.png)
+
+###### 元数据锁 meta data lock
+![alt text](image-65.png)
+
+###### 意向锁
+![alt text](image-66.png)
+![alt text](image-67.png)
+
+
+### 行级锁
+###### 行锁
+![alt text](image-69.png)
+![alt text](image-68.png)
+
+> ![alt text](image-70.png)
+
+###### 间隙锁 && 临键锁
+![alt text](image-71.png)
+
+
+## InnoDB引擎
+### 逻辑存储结构
+![alt text](image-72.png)
+
+### 架构
+###### 内存结构
+- 缓冲池
+![alt text](image-73.png)
+
+- 更改缓冲区
+![alt text](image-74.png)
+
+- 自适应哈希
+- 日志缓冲区
+
+###### 磁盘结构
+- System Tablespace：系统表空间，存储更改缓冲区、数据字典、事务信息等。
+- File-Per-Table Tablespaces：文件-表空间，存储表数据和索引。
+- General Tablespace：通用表空间，存储无表空间文件的表数据。
+- Undo Tablespace：撤销表空间，存储undo log日志。
+- Temporary Tablespace：临时表空间，存储临时表数据。
+- Doublewrite Buffer：双写缓冲区，用于磁盘数据与内存数据同步。
+- Redo Log：重做日志，存储修改信息，用于数据恢复。
+
+| 特性         | Redo Log         | Undo Log                |
+| ---------- | ---------------- | ----------------------- |
+| **主要用途**   | 崩溃恢复、事务持久性       | 事务回滚、MVCC               |
+| **记录内容**   | 数据页的物理更改         | 事务更改前的原始数据              |
+| **存储位置**   | MySQL 数据目录下的日志文件 | InnoDB 系统表空间（`ibdata1`） |
+| **事务提交后**  | Redo Log 保留      | Undo Log 根据需要自动清理       |
+| **与事务的关系** | 确保事务的持久性         | 支持事务的回滚和并发控制            |
+
+
+###### 后台线程
+![alt text](image-75.png)
+
+
+### 事务原理
+###### 概述
+![alt text](image-76.png)
+
+###### redolog
+![alt text](image-77.png)
+
+###### undolog
+![alt text](image-78.png)
+> insert语句的undolog只在回滚时需要，故事务正常提交后，可被立即删除。
+
+### MVCC
+###### 概述
+![alt text](image-79.png)
+
+###### 隐式字段
+![alt text](image-80.png)
+
+###### undolog版本链
+![alt text](image-81.png)
+
+###### readview
+![alt text](image-82.png)
+> ![alt text](image-83.png)
+> > ==应该是trx_id >= max_trx_id(即当前最新事务ID + 1)==
+
+## 运维
+### 主从复制
+![alt text](image-84.png)
+
+
+### 分库分表
+![alt text](image-85.png)
+
+### 读写分离
+![alt text](image-86.png)

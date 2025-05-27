@@ -23,6 +23,8 @@
 ### 整体架构
 ![alt text](image-2.png)
 
+> 还存在Channel概念，用于操作MQ的工具。
+
 
 ### 数据隔离
 Virtual Hosts：
@@ -42,12 +44,14 @@ Virtual Hosts：
 ![alt text](image-4.png)
 
 
-###### Work模型
+###### WorkQueue模型
 - 多个消费者绑定到一个队列，加快处理速度
 - 通过设置prefetch来控制消费者预获取的消息数量，实现“能者多劳”。
 
 ###### Fanout交换机（广播）
 ![alt text](image-5.png)
+
+> 绑定的所有队列都接收到消息。
 
 ###### Direct交换机（定向）
 ![alt text](image-6.png)
