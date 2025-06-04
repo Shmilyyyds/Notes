@@ -160,3 +160,85 @@ eureka:
 ![alt text](image-28.png)
 
 ![alt text](image-27.png)
+
+
+## Sentinel
+### 雪崩问题
+![alt text](image-29.png)
+
+
+### 快速入门
+![alt text](image-30.png)
+
+
+### 限流规则
+###### 流控模式
+![alt text](image-31.png)
+
+> ![alt text](image-32.png)
+>
+> ![alt text](image-34.png)
+
+###### 流控效果
+![alt text](image-33.png)
+
+
+### 隔离和降级
+#### Feign整合Sentinel
+![alt text](image-35.png)
+
+#### 线程隔离实现
+![alt text](image-36.png)
+
+
+#### 熔断降级实现
+![alt text](image-37.png)
+
+
+### 授权规则和自定义异常处理
+#### 获取请求来源接口
+- `RequestOriginParser`
+
+> ![alt text](image-38.png)
+
+#### 自定义异常处理
+- `BlockExceptionHandler`
+
+> ![alt text](image-39.png)
+
+
+### Sentinel规则持久化
+Sentinel的控制台规则管理有三种模式：
+- 原始模式：Sentinel默认模式，规则在内存中，重启失效。
+- pull模式：保存在本地文件或数据库，定期更新
+- push模式：保存在Nacos中，监听更新。
+
+
+## 分布式事务Seata
+### 概念
+在分布式系统下，一个业务跨越多个服务或数据源，要保证每个分支的事务最终状态一致，这样的事务叫做分布式事务。
+
+### 理论基础
+###### CAP定理
+![alt text](image-40.png)
+
+
+###### BASE理论
+![alt text](image-41.png)
+
+
+### Seata
+###### 架构
+![alt text](image-42.png)
+
+###### 模式
+- XA模式：
+![alt text](image-43.png)
+- AT模式（存在全局事务锁、before-image、after-image避免脏写）：
+![alt text](image-44.png)
+- TCC模式：
+![alt text](image-45.png)
+- Saga模式：反向操作补偿
+
+###### 高可用
+![alt text](image-46.png)

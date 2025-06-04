@@ -178,3 +178,7 @@ public class RabbitConfig {
 
 > 发送延迟消息：
 > ![alt text](image-30.png)
+
+
+### 集群
+![alt text](image-31.png)
