@@ -309,4 +309,105 @@ $$
 ![alt text](image-55.png)
 ![alt text](image-56.png)
 
-####
+###### 基本分段存储管理
+![alt text](image-57.png)
+![alt text](image-58.png)
+![alt text](image-59.png)
+
+
+###### 段页式管理
+![alt text](image-60.png)
+
+
+### 虚拟内存
+![alt text](image-61.png)
+![alt text](image-62.png)
+###### 页面置换算法
+- 最佳置换算法：每次淘汰最少使用的页面
+- 先进先出置换算法：每次淘汰最先进入的页面（硬件要求大）
+- 最近最久未使用置换算法：每次淘汰最久没有被访问的页面
+- 时钟置换算法：每次淘汰最久没有被访问的页面，但需要维护一个访问位图
+- 优化时钟置换算法：
+![alt text](image-63.png)
+
+
+###### 页面分配策略
+![alt text](image-64.png)
+
+> 抖动：原因是分配给进程的物理块不够。
+
+
+## 文件管理
+### 逻辑结构
+###### 无结构文件
+文件内部的数据就是一系列二进制流或字符流组成。
+
+###### 有结构文件
+![alt text](image-65.png)
+
+
+### 文件目录
+![alt text](image-66.png)
+
+
+### 物理结构
+- 连续分配
+- 链式分配（隐式链接）（每个盘块包含一个指针）
+- 链式分配（显示连接）（存在FAT-文件分配表，存放每个盘块的下一个盘块号）
+![alt text](image-67.png)
+- 索引分配
+![alt text](image-68.png)
+
+### 存储空间管理
+![alt text](image-69.png)
+![alt text](image-70.png)
+![alt text](image-71.png)
+![alt text](image-72.png)
+
+
+### 文件操作
+![alt text](image-73.png)
+
+### 文件共享
+- 硬链接
+![alt text](image-74.png)
+
+- 软连接（快捷方式）
+
+
+## IO
+### IO控制器
+![alt text](image-75.png)
+
+###### 控制方式
+- 程序控制方式
+![alt text](image-78.png)
+- 中断驱动方式
+- DMA方式
+![alt text](image-76.png)
+- 通道方式
+![alt text](image-77.png)
+
+### 机器磁盘
+#### 磁盘结构
+![alt text](image-79.png)
+![alt text](image-80.png)
+
+
+> 磁头默认在最外圈。
+
+#### 磁盘调度算法
+- 先来先服务调度算法（FCFS）
+- 最短寻道时间优先算法（SSTF）
+- 扫描算法（SCAN）（电梯算法，往右要到底）
+- LOOK算法（电梯算法，无需到底）
+- 循环扫描算法（C-SCAN，左右到底）
+- C-LOOK算法（C-SCAN，无需到底）
+
+> ![alt text](image-81.png)
+
+#### 引导块
+![alt text](image-82.png)
+
+
+### SSD固态硬盘
